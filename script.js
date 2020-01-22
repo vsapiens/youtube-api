@@ -1,11 +1,12 @@
+var pageToken = "";
+var prevToken = "";
+var nextToken = "";
 function displayResults(responseJSON) {
   let results = $(".results");
-  console.log(responseJSON.items);
-  var pageToken = responseJSON.items.nextPageToken;
+  console.log(responseJSON);
   $.each(responseJSON.items, function() {
-    $(
-      results.append(
-        `
+    $(results).append(
+      `
         <a href="https://www.youtube.com/watch?v=${this.id.videoId}">
         <h2> ${this.snippet.title}</h2> 
         </a>
@@ -13,25 +14,44 @@ function displayResults(responseJSON) {
         <img src="${this.snippet.thumbnails.medium.url}"/>
         </a>
         `
-      )
     );
   });
-  $(
-    results.append(
-      `
-      <div class="button">
-        <button type="button"> Next </button>
-        <button type="button"> Previous  </button>
-      </div>
-    `
-    )
-  );
+  $(".button").empty();
+  if (responseJSON.prevPageToken) {
+    $(".button").append(`<button type="button" id="prev"> Previous</button>`);
+    prevToken = responseJSON.prevPageToken;
+    console.log(responseJSON.prevPageToken);
+  }
+  $(".button").append(`<button type="button" id="next"> Next</button>`);
+  nextToken = responseJSON.nextPageToken;
 }
+
+$(".button").on("click", "#prev", function(e) {
+  event.preventDefault();
+  $(".results").empty();
+  $(".button").empty();
+  pageToken = `&pageToken=${prevToken}`;
+  fetchVideos();
+});
+
+$(".button").on("click", "#next", function(e) {
+  event.preventDefault();
+  $(".results").empty();
+  $(".button").empty();
+  pageToken = `&pageToken=${nextToken}`;
+  console.log(nextToken);
+  fetchVideos();
+});
 function fetchVideos() {
   let url =
-    "https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyCK17iXix09rlMz4C_qtg3YrkqNH8AvsyY&maxResults=10&q=";
+    "https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyCK17iXix09rlMz4C_qtg3YrkqNH8AvsyY&maxResults=10&type=video&q=";
   let text = $("#text").val();
+  if (text === "") {
+    alert("Inserte algo en la barra de busqueda.");
+    return false;
+  }
   url += text;
+  url += pageToken;
   console.log(url);
 
   $.ajax({
