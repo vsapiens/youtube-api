@@ -11,3 +11,10 @@ body {
   justify-content: flex-start;
   align-items: flex-start;
 }
+.button {
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  justify-content: space-between;
+  align-items: center;
+}
