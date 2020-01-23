@@ -4,6 +4,7 @@ var nextToken = "";
 function displayResults(responseJSON) {
   let results = $(".results");
   console.log(responseJSON);
+  $(".results").empty();
   $.each(responseJSON.items, function() {
     $(results).append(
       `
