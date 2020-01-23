@@ -8,10 +8,10 @@ function displayResults(responseJSON) {
   $.each(responseJSON.items, function() {
     $(results).append(
       `
-        <a href="https://www.youtube.com/watch?v=${this.id.videoId}">
+        <a href="https://www.youtube.com/watch?v=${this.id.videoId} target="_blank"">
         <h2> ${this.snippet.title}</h2> 
         </a>
-        <a href="https://www.youtube.com/watch?v=${this.id.videoId}">
+        <a href="https://www.youtube.com/watch?v=${this.id.videoId} target="_blank"">
         <img src="${this.snippet.thumbnails.medium.url}"/>
         </a>
         `
